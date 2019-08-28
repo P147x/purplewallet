@@ -33,4 +33,5 @@
 
 # Others
 *.code-workspace
-/bin
+bin
+examples/config.yaml
