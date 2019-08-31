@@ -15,17 +15,6 @@ import (
 	models "purplewallet/internal/models"
 )
 
-var Config = struct {
-	Port     int
-	Database struct {
-		Password string `required:"true" env:"DBPassword"`
-		User     string
-		URL      string
-		DBName   string
-		Port     int `default:"3306"`
-	}
-}{}
-
 func addUser(c *gin.Context) {
 	name := c.PostForm("name")
 	c.String(http.StatusOK, "Hello %s", name)
@@ -44,7 +33,7 @@ func main() {
 	if init_database(&db) == false {
 		return
 	}
-	r.Run()
+	r.Run(":" + strconv.Itoa(Config.Port))
 	defer db.Close()
 }
 
