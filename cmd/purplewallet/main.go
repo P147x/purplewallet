@@ -7,32 +7,7 @@ import (
 )
 import "log"
 import "strconv"
-
-type Wallets struct {
-	ID           int            `gorm:"primary_key, AUTO_INCREMENT"`
-	Name         string         `json:"name"`
-	Users        []Users        `gorm:"many2many:users_wallets"`
-	Transactions []Transactions `gorm:"ForeignKey:ID"`
-}
-
-type Users struct {
-	ID      int       `gorm:"primary_key, AUTO_INCREMENT"`
-	Name    string    `json:”name”`
-	Wallets []Wallets `gorm:"many2many:users_wallets"`
-}
-
-type Categories struct {
-	ID   int    `gorm:"primary_key, AUTO_INCREMENT"`
-	Name string `json:"name"`
-}
-
-type Transactions struct {
-	ID           int    `gorm:"primary_key, AUTO_INCREMENT"`
-	Date         string `json:"date"`
-	Reason       string `json:"reason"`
-	CategoriesID int    `gorm:"foreignkey:ID"`
-	Categories   Categories
-}
+import models "purplewallet/internal/models"
 
 var Config = struct {
 	Database struct {
@@ -59,10 +34,10 @@ func test_dummies_entries(db *gorm.DB) {
 	db.Create(&user)*/
 	//cat := Categories{Name: "Courses"}
 	//db.Create(&cat)
-	tr := Transactions{}
+	//tr := models.Transactions{}
 
 	//restitution
-	var users []Users
+	var users []models.Users
 	db.Find(&users)
 	for _, us := range users {
 		log.Println(us.Name)
@@ -81,10 +56,10 @@ func init_database() bool {
 	}
 	log.Println("Success")
 	db.LogMode(true)
-	db.AutoMigrate(&Categories{})
-	db.AutoMigrate(&Users{})
-	db.AutoMigrate(&Wallets{})
-	db.AutoMigrate(&Transactions{})
+	db.AutoMigrate(&models.Categories{})
+	db.AutoMigrate(&models.Users{})
+	db.AutoMigrate(&models.Wallets{})
+	db.AutoMigrate(&models.Transactions{})
 	test_dummies_entries(db)
 	defer db.Close()
 	return true
