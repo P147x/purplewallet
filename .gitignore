@@ -31,3 +31,4 @@
 *.code-workspace
 bin
 examples/config.yaml
+*.bak
