@@ -1,4 +1,4 @@
-package main
+package config
 
 var Config = struct {
 	Port     int `default:"8080"`
