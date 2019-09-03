@@ -1,0 +1,36 @@
+@startuml
+participant client
+participant server
+database "db User"
+database "db Wallet"
+database "db Wallet_Users"
+
+client -> server: POST /api/v1/purchase
+server -> server: Check all needed arguments
+alt required arguments ok
+    server -> "db Wallet": Check if the wallet exists
+    alt wallet exists
+        server <-- "db Wallet": Wallet exists
+        server -> "db User": Check if the user exists
+        alt user exists
+            server <-- "db User": User exists
+            server -> "db Wallet_Users": Check if the user has right on the wallet
+            alt user is affiliated to the wallet
+            server <-- "db Wallet_Users": User is affiliated to the wallet
+        else users does not exist
+            server <-- "db User": Users has no rights on the wallet
+            server --> client: Returns an error
+        end
+        else users does not exist
+            server <-- "db User": User does not exists
+            server --> client: Returns an error
+        end
+    else wallet does not exists
+        server <-- "db Wallet": Wallet does not exists
+        server --> client: Returns an error
+    end 
+    server --> client: 200 
+else missing arguments
+    server --> client: Returns an error
+end
+@enduml
