@@ -90,7 +90,6 @@ func getUsersInWallet(wallet int) []models.Users {
 
 func IsWalletInDatabase(id int) bool {
 	var count int
-	//var users []models.Users
 	database.GetDatabase().Table("wallets").Where("id = ?", id).Count(&count)
 	if count == 0 {
 		return false
