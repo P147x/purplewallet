@@ -24,15 +24,6 @@ func isUserInDatabase(id int) bool {
 	return true
 }
 
-func isWalletInDatabase(id int) bool {
-	var count int
-	database.GetDatabase().Table("wallets").Where("id = ?", id).Count(&count)
-	if count == 0 {
-		return false
-	}
-	return true
-}
-
 func checkIfUserCanRegister(idUser int, idWallet int) bool {
 	var count int
 	database.GetDatabase().Table("users_wallets").Where("users_id = ? AND wallets_id = ?", idUser, idWallet).Count(&count)
@@ -53,13 +44,13 @@ func addNewPurchase(c *gin.Context) {
 		return
 	}
 	if isUserInDatabase(int(userID)) == false ||
-		isWalletInDatabase(int(wallet)) == false ||
+		IsWalletInDatabase(int(wallet)) == false ||
 		checkIfUserCanRegister(int(userID), int(wallet)) == false {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing parameters"})
 		return
 	}
 
-	purchase := models.Purchase{Sum: sum, Reason: reason, Date: time.Now(), OwedBy: int(owedBy), CategoriesID: 0, UserID: 0}
+	purchase := models.Purchase{Sum: sum, Reason: reason, Date: time.Now(), OwedBy: int(owedBy), CategoriesID: 0, UserID: int(userID), WalletID: int(wallet)}
 	database.GetDatabase().Create(&purchase)
 	c.String(http.StatusAccepted, "Success")
 }

@@ -8,6 +8,7 @@ type Purchase struct {
 	Date         time.Time `json:"date"`
 	Reason       string    `json:"reason"`
 	OwedBy       int       `json:"owed_by"`
+	WalletID     int       `json:"wallet_id"`
 	CategoriesID int       `gorm:"foreignkey:ID"`
 	UserID       int       `gorm:"foreignkey:ID"`
 	Categories   Categories
