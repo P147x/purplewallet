@@ -9,4 +9,5 @@ var Config = struct {
 		DBName   string
 		Port     int `default:"3306"`
 	}
+	JWT string 
 }{}
