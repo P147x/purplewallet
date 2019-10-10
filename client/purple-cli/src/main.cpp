@@ -6,7 +6,6 @@
 int	main(int argc, char *argv[])
 {
 	Config config;
-	config.loadConfiguration();
 	termios oldt;
   	tcgetattr(STDIN_FILENO, &oldt);
   	termios newt = oldt;

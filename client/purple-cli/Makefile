@@ -1,7 +1,7 @@
-CC		= clang
+CC		= /usr/bin/g++
 RM		= rm -f
 
-CFLAGS 	= -Wall -Wextra -I./includes
+CXXFLAGS 	= -Wall -Wextra -I./includes
 
 SRCS 	= src/main.cpp
 OBJS	= $(SRCS:.cpp=.o)
@@ -9,7 +9,7 @@ OBJS	= $(SRCS:.cpp=.o)
 NAME	= purple-cli
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) -o $(NAME)
+	/usr/bin/g++ $(OBJS) -o $(NAME) $(CXXFLAGS)
 
 clean:
 	$(RM) $(OBJS)
