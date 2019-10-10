@@ -17,7 +17,14 @@ func Wallet(r *gin.RouterGroup) {
 }
 
 func getBalance(c *gin.Context) {
+	user, _ := c.Get("username")
 	wallet, _ := strconv.ParseInt(c.Param("wallet"), 10, 64)
+
+	if checkUserAccessToWallet(user.(*models.Users).Username, int(wallet)) == false {
+		c.JSON(http.StatusUnauthorized, gin.H{})
+		return
+	}
+
 	if wallet == 0 || IsWalletInDatabase(int(wallet)) == false {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing parameters"})
 		return
@@ -55,6 +62,17 @@ func getBalance(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusAccepted, wlt)
+}
+
+func checkUserAccessToWallet(username string, wID int) bool {
+	var users []models.Users
+	users = getUsersInWallet(wID)
+	for _, u := range users {
+		if u.Username == username {
+			return true
+		}
+	}
+	return false
 }
 
 func getWalletTotalCommonsFees(users []serializable.UserBalance) float64 {
