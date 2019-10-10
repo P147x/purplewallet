@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"purplewallet/internal/database"
 	"purplewallet/internal/models"
@@ -28,21 +29,24 @@ func checkIfUserCanRegister(idUser int, idWallet int) bool {
 func addNewPurchase(c *gin.Context) {
 	sum, err := strconv.ParseFloat(c.PostForm("sum"), 64)
 	reason := c.PostForm("reason")
-	userID, _ := strconv.ParseInt(c.DefaultPostForm("user_id", "0"), 10, 32)
+	//userID, _ := strconv.ParseInt(c.DefaultPostForm("user_id", "0"), 10, 32)
+	username, _ := c.Get("username")
+	user, _ := getUserFromDatabase(username.(*models.Users).Username)
 	wallet, _ := strconv.ParseInt(c.DefaultPostForm("wallet", "0"), 10, 32)
 	owedBy, _ := strconv.ParseInt(c.DefaultPostForm("owedBy", "0"), 10, 32)
-	if err != nil || reason == "" || userID == 0 || wallet == 0 {
+	fmt.Printf("r: " + reason + "uid: " + string(user.ID))
+	if err != nil || reason == "" || user.ID == 0 || wallet == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing parameters"})
 		return
 	}
-	if isUserInDatabase(int(userID)) == false ||
+	if isUserInDatabase(int(user.ID)) == false ||
 		IsWalletInDatabase(int(wallet)) == false ||
-		checkIfUserCanRegister(int(userID), int(wallet)) == false {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing parameters"})
+		checkIfUserCanRegister(int(user.ID), int(wallet)) == false {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User is not allowed"})
 		return
 	}
 
-	purchase := models.Purchase{Sum: sum, Reason: reason, Date: time.Now(), OwedBy: int(owedBy), CategoriesID: 0, UserID: int(userID), WalletID: int(wallet)}
+	purchase := models.Purchase{Sum: sum, Reason: reason, Date: time.Now(), OwedBy: int(owedBy), CategoriesID: 0, UserID: int(user.ID), WalletID: int(wallet)}
 	database.GetDatabase().Create(&purchase)
 	c.String(http.StatusAccepted, "Success")
 }
@@ -55,4 +59,12 @@ func getPurchaseByName(c *gin.Context) {
 	}
 	// Check here if username is found in database / Return error if no user is found, otherwise, return the list
 
+}
+
+func getUserFromDatabase(username string) (models.Users, error) {
+	var user models.Users
+	if database.GetDatabase().Where("username = ?", username).First(&user).RecordNotFound() {
+		return user, fmt.Errorf("No user found in records")
+	}
+	return user, nil
 }
