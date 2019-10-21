@@ -3,8 +3,11 @@
 class Config {
     private:
         std::string token;
-        
-        void createConfigurationFile();
+        std::string _home;
+
+        void        checkConfigurationPath();
+        void        createConfigurationFile();
     public:
-        void loadConfiguration();
+        void        loadConfiguration();
+        Config();
 };

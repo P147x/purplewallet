@@ -1,0 +1,6 @@
+purple purchase add -d 2 -w 1 -s
+
+purple purchase add
+-> Wallet number: ?
+-> Sum: ?
+-> Comment: ?

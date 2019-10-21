@@ -1,20 +1,19 @@
-#include <iostream>
-#include <termios.h>
-#include <unistd.h>
-#include "config.hpp"
+#include "purple.hpp"
+
+void printUsage()
+{
+    std::cout   << "purplewallet:" << std::endl
+                << "purchase - Add" << std::endl;
+}
 
 int	main(int argc, char *argv[])
 {
-	Config config;
-	termios oldt;
-  	tcgetattr(STDIN_FILENO, &oldt);
-  	termios newt = oldt;
-  	newt.c_lflag &= ~ECHO;
-  	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
- 	std::string s;
-  	std::cout << "Enter password:";
-  	getline(std::cin, s);
-  	std::cout << std::endl;
-	
-	return 0;
+	Purple program;
+	if (argc <= 1)
+    {
+	    std::cerr << "Error: You must give at least one argument" << std::endl;
+	    printUsage();
+	    return 1;
+    }
+	return program.run();
 }
