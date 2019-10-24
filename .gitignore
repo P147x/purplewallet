@@ -32,7 +32,7 @@
 bin
 examples/config.yaml
 *.bak
+/src/
 vendor/
-src/
 config/config.yaml
 purplewallet

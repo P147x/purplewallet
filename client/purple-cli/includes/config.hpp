@@ -5,9 +5,14 @@ class Config {
         std::string token;
         std::string _home;
 
-        void        checkConfigurationPath();
+        bool        checkConfigurationPath();
         void        createConfigurationFile();
+        void        getConfiguration();
+        void        save();
     public:
         void        loadConfiguration();
+        std::string getToken();
+        void        setToken(std::string);
+
         Config();
 };

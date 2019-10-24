@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fstream>
 
 #define CONFIG_FILE "/.config/purplewallet"
 
@@ -14,20 +15,68 @@ Config::Config()
     _home += CONFIG_FILE;
 }
 
-void Config::createConfigurationFile() 
-{
+/*
+ *  Get ? Set !
+ */
 
-    mkdir(_home.c_str(), 0777);
+std::string Config::getToken()
+{
+    return this->token;
 }
 
-void Config::checkConfigurationPath() {
+void        Config::setToken(std::string token)
+{
+    this->token = token;
+}
+
+// TODO 24/10/2019 : check if folder has been created
+void    Config::createConfigurationFile()
+{
+    mkdir(_home.c_str(), 0777);
+    std::ofstream outfile;
+
+
+    outfile.close();
+}
+
+void    Config::save()
+{
+    std::ofstream file;
+
+    file.open(_home + "/config", std::ofstream::out | std::ofstream::trunc);
+    file << token;
+    file.close();
+}
+
+// TODO 24/10/2019 : change printf for std::cout ffs.
+bool    Config::checkConfigurationPath() {
     struct stat info;
     if(stat(_home.c_str(), &info) != 0 )
+    {
         printf( "cannot access %s\n", CONFIG_FILE);
-    std::cout << "ok";
+        return false;
+    }
+    return true;
+}
+
+void Config::getConfiguration()
+{
+    std::ifstream    file;
+    char            line[100];
+    file.open(_home);
+    if (file.is_open())
+    {
+        file >> line;
+        token = line;
+    }
+    file.close();
 }
 
 void Config::loadConfiguration() 
 {
-    this->checkConfigurationPath();
+    if (this->checkConfigurationPath() == true)
+        getConfiguration();
+    else
+        this->createConfigurationFile();
+
 }

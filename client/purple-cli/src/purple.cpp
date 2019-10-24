@@ -1,5 +1,17 @@
 #include "purple.hpp"
 
+std::string promptPassword() {
+    termios oldt;
+    tcgetattr(STDIN_FILENO, &oldt);
+    termios newt = oldt;
+    newt.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    std::string s;
+    std::cout << "Enter password:";
+    getline(std::cin, s);
+    return s;
+}
+
 //  CONSTRUCTORS
 Purple::Purple() {
 }
@@ -7,12 +19,28 @@ Purple::Purple() {
 int Purple::run()
 {
     this->config.loadConfiguration();
+    this->tryLogin();
+    //
+    return 0;
 }
 
-bool Purple::tryLogin()
+bool    Purple::login()
 {
-    // check if file exists
-    //
+    unsigned int    count;
+    std::string     pass;
+
+    count = 0;
+    do {
+        pass = promptPassword();
+    } while (++count <= 3)
+
+    return false;
+}
+
+bool    Purple::tryLogin()
+{
+    if (this->config.getToken() == "")
+        this->login();
     return false;
 }
 
