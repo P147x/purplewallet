@@ -32,8 +32,8 @@ bool    Purple::login()
     count = 0;
     do {
         pass = promptPassword();
-    } while (++count <= 3)
-
+        std::cout << std::endl;
+    } while (++count < 3);
     return false;
 }
 
