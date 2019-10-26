@@ -1,5 +1,8 @@
 #include <sstream>
 #include "network.hpp"
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 Network::Network() {
 
@@ -12,6 +15,7 @@ std::string Network::connexion(std::string user, std::string pass)
     curlpp::Cleanup cleaner;
     curlpp::Easy request;
     std::ostringstream response;
+    json empty_array_explicit = json::array();
 
     request.setOpt(new curlpp::options::Url("localhost:8080/api/v1/login?username=" + user + "&password=" + pass));
     //request.setOpt(new curlpp::options::Verbose(true));
@@ -26,7 +30,9 @@ std::string Network::connexion(std::string user, std::string pass)
 
     request.perform();
     std::string(response.str());
-    std::cout << response.str();
-
-    return token;
+    auto j3 = json::parse(response.str());
+    if (j3["code"] == 200)
+        return j3["token"];
+    else
+        return "";
 }

@@ -32,13 +32,15 @@ bool    Purple::login()
     std::string     pass;
 
     count = 0;
-    while (count++ < 3) {
+    do {
         std::cout << "Username ?" << std::endl;
         name = promptName();
         pass = getPassword();
         std::cout << std::endl;
-        network.connexion(name, pass);
-    }
+        config.setToken(network.connexion(name, pass));
+        if (config.getToken() == "")
+            std::cout << "Error" << std::endl;
+    } while (config.getToken() == "" && count++ < 3);
     return false;
 }
 

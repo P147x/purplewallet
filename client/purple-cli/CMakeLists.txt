@@ -18,6 +18,9 @@ if(APPLE)
 INCLUDE_DIRECTORIES(/usr/local/include)
 LINK_DIRECTORIES(/usr/local/lib)
 endif()
+
+find_package(nlohmann_json 3.2.0 REQUIRED)
+
 include_directories(includes)
 set(SOURCES
 	src/main.cpp
@@ -37,3 +40,4 @@ set(HEADER_FILES
 add_executable(purple ${SOURCES} ${HEADER_FILES})
 target_link_libraries(purple curl)
 target_link_libraries(purple curlpp)
+target_link_libraries(purple nlohmann_json::nlohmann_json)
