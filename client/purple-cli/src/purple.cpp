@@ -1,4 +1,5 @@
 #include "purple.hpp"
+#include "utils.h"
 
 std::string promptPassword() {
     termios oldt;
@@ -27,19 +28,23 @@ int Purple::run()
 bool    Purple::login()
 {
     unsigned int    count;
+    std::string     name;
     std::string     pass;
 
     count = 0;
-    do {
-        pass = promptPassword();
+    while (count++ < 3) {
+        std::cout << "Username ?" << std::endl;
+        name = promptName();
+        pass = getPassword();
         std::cout << std::endl;
-    } while (++count < 3);
+        network.connexion(name, pass);
+    }
     return false;
 }
 
 bool    Purple::tryLogin()
 {
-    if (this->config.getToken() == "")
+    if (this->config.getToken().empty())
         this->login();
     return false;
 }
