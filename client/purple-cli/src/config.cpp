@@ -1,7 +1,7 @@
 #include "config.hpp"
 #include <iostream>
 #include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
 #include <sys/stat.h>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -39,17 +39,15 @@ void    Config::createConfigurationFile()
 
 void    Config::removeConfiguration()
 {
-    std::ofstream file;
+    std::string     cfile = _home + "/config";
 
-    file.open(_home + "/config", std::ofstream::out | std::ofstream::trunc);
-    file << "";
-    file.close();
+    remove(cfile.c_str());
 }
 
 void    Config::save()
 {
     std::ofstream file;
-    nlohmann::json j = nullptr;
+    nlohmann::json j;
 
     file.open(_home + "/config", std::ofstream::out | std::ofstream::trunc);
     j["token"] = token;
@@ -79,7 +77,8 @@ void Config::getConfiguration()
     if (file.is_open())
     {
         file >> j;
-            token = j.at("token").get<std::string>();
+        token = j.at("token").get<std::string>();
+        host = j.at("host").get<std::string>();
     }
     file.close();
 }
