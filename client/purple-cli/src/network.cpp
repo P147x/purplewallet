@@ -30,7 +30,7 @@ std::string Network::getWallet(int id)
 
     request.setOpt(new curlpp::options::UserPwd("user:password"));
     request.setOpt(new curlpp::options::Url("localhost:8080/api/v1/wallet/balance/" + std::to_string(id)));
-    request.setOpt(new curlpp::options::Verbose(true));
+    //request.setOpt(new curlpp::options::Verbose(true));
 
     std::list<std::string> header;
     header.push_back("Content-Type: application/octet-stream");

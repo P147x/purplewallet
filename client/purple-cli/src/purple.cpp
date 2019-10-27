@@ -2,6 +2,7 @@
 #include "purple.hpp"
 #include "utils.h"
 #include <cmath>
+#include <nlohmann/json.hpp>
 
 //  CONSTRUCTORS
 Purple::Purple() {
@@ -9,7 +10,27 @@ Purple::Purple() {
 
 void    Purple::getWalletInformation(int id)
 {
-    std::cout << this->network.getWallet(id) << std::endl;
+    std::string wallet = this->network.getWallet(id);
+    auto json = nlohmann::json::parse(wallet);
+    unsigned int users;
+    users = json["NbUsers"].get<int>();
+
+    if (json["code"] >= 300)
+    {
+        std::cerr << "Error occured" << std::endl;
+        return;
+    }
+    std::cout   << "=== Wallet 1 informations ===" << std::endl;
+    for (int i = 0; i != users; i++)
+    {
+        std::cout << "User :" << json["Users"][i]["UserID"] << std::endl
+                    << "Total : " << json["Users"][i]["Total"] << std::endl
+                    << "Expenses informations :" << std::endl
+                    << " - Commons : " << json["Users"][i]["CommonPurchases"] << std::endl
+                    << " - Debts : " << json["Users"][i]["Debts"] << std::endl
+                    << "Current user balance : " << json["Users"][i]["Balance"] << std::endl << std::endl;
+    }
+
 }
 
 void    Purple::commandPicker(std::vector<std::string> args)
