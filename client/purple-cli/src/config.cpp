@@ -1,11 +1,10 @@
 #include "config.hpp"
 #include <iostream>
 #include <stdlib.h>
-#include <dirent.h>
 #include <stdio.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
+#include <nlohmann/json.hpp>
 
 #define CONFIG_FILE "/.config/purplewallet"
 
@@ -35,7 +34,6 @@ void    Config::createConfigurationFile()
     mkdir(_home.c_str(), 0777);
     std::ofstream outfile;
 
-
     outfile.close();
 }
 
@@ -51,9 +49,12 @@ void    Config::removeConfiguration()
 void    Config::save()
 {
     std::ofstream file;
+    nlohmann::json j = nullptr;
 
     file.open(_home + "/config", std::ofstream::out | std::ofstream::trunc);
-    file << token;
+    j["token"] = token;
+    j["host"] = host;
+    file << j;
     file.close();
 }
 
@@ -71,13 +72,14 @@ bool    Config::checkConfigurationPath() {
 void Config::getConfiguration()
 {
     std::ifstream    file;
-    //char            line[100];
+    nlohmann::json j;
+
     std::string line;
     file.open(_home + "/config");
     if (file.is_open())
     {
-        file >> line;
-        token = line;
+        file >> j;
+            token = j.at("token").get<std::string>();
     }
     file.close();
 }

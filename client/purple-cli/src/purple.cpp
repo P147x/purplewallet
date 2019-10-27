@@ -106,7 +106,7 @@ void    Purple::addPurchase(bool isDebt)
 
 void    Purple::commandPicker(std::vector<std::string> args)
 {
-    if(args.size() == 2 && args[0] == "wallet" && std::stoi(args[1]))
+    if(args[0] == "wallet")
     {
         std::cout << "Balance asked" << std::endl;
         this->getWalletInformation(std::stoi(args[1]));

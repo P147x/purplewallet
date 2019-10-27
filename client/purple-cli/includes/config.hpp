@@ -3,6 +3,7 @@
 class Config {
     private:
         std::string token;
+        std::string host;
         std::string _home;
 
         bool        checkConfigurationPath();
