@@ -28,6 +28,17 @@ void        Config::setToken(std::string token)
     this->token = token;
 }
 
+bool    Config::checkConfiguration()
+{
+    if (this->host == "")
+    {
+        std::cerr << "No hostname found in configuration." << std::endl;
+        std::cerr << "\tpurple set hostname <hostname>" << std::endl;
+        return false;
+    }
+    return true;
+}
+
 // TODO 24/10/2019 : check if folder has been created
 void    Config::createConfigurationFile()
 {
@@ -90,4 +101,12 @@ void Config::loadConfiguration()
     else
         this->createConfigurationFile();
 
+}
+
+void Config::setHostname(std::string hostname) {
+    this->host = hostname;
+}
+
+std::string Config::getHostname() {
+    return this->host;
 }

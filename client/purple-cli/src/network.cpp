@@ -30,7 +30,7 @@ std::string Network::putNewPurchase(unsigned int wID, float sum, std::string com
         body = "wallet=" + std::to_string(wID) + "&sum=" + std::to_string(sum) + "&reason=" + comment;
     else if (debt_user > 0)
         body = "wallet=" + std::to_string(wID) + "&sum=" + std::to_string(sum) + "&reason=" + comment + "&owedBy=" + std::to_string(debt_user);
-    request.setOpt(new curlpp::options::Url("localhost:8080/api/v1/purchase"));
+    request.setOpt(new curlpp::options::Url(hostname + "/api/v1/purchase"));
     //request.setOpt(new curlpp::options::Verbose(true));
 
     std::list<std::string> header;
@@ -55,7 +55,7 @@ std::string Network::getWallet(int id)
 
 
     request.setOpt(new curlpp::options::UserPwd("user:password"));
-    request.setOpt(new curlpp::options::Url("localhost:8080/api/v1/wallet/balance/" + std::to_string(id)));
+    request.setOpt(new curlpp::options::Url(hostname + "/api/v1/wallet/balance/" + std::to_string(id)));
     //request.setOpt(new curlpp::options::Verbose(true));
 
     std::list<std::string> header;
@@ -77,7 +77,7 @@ std::string Network::connexion(std::string user, std::string pass)
     std::ostringstream response;
     json empty_array_explicit = json::array();
 
-    request.setOpt(new curlpp::options::Url("localhost:8080/api/v1/login?username=" + user + "&password=" + pass));
+    request.setOpt(new curlpp::options::Url(hostname + "/api/v1/login?username=" + user + "&password=" + pass));
     //request.setOpt(new curlpp::options::Verbose(true));
 
     std::list<std::string> header;
@@ -95,4 +95,8 @@ std::string Network::connexion(std::string user, std::string pass)
         return j3["token"];
     else
         return "";
+}
+
+void Network::setHostname(std::string hostname) {
+    this->hostname = hostname;
 }

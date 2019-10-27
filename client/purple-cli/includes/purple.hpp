@@ -13,14 +13,11 @@ class Purple {
         Config      config;
         Network     network;
         bool        login();
-    public:
+public:
         bool        tryLogin();
-        int         run();
-        Purple();
+        Purple() = default;
 
     int run(std::vector<std::string> args);
-
-    void commandPicker(char **argv);
 
     void commandPicker(std::vector<std::string> args);
 
@@ -32,9 +29,15 @@ class Purple {
 
     float setSum();
 
-    bool printInvoice(unsigned int wallet, float sum, std::string comment, bool isDebt);
-
     bool printInvoice(unsigned int wallet, float sum, std::string comment, unsigned int debt_user);
+
+    void setHostname();
+
+    void printHelp();
+
+    void setHostname(std::string hostname);
+
+    bool offlineCommands(std::vector<std::string> args);
 };
 
 #endif //PURPLE_HPP

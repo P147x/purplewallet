@@ -11,9 +11,12 @@ class Config {
         void        getConfiguration();
 
 public:
+        bool        checkConfiguration();
         void        loadConfiguration();
         std::string getToken();
         void        setToken(std::string);
+        void        setHostname(std::string);
+        std::string getHostname();
 
         Config();
 

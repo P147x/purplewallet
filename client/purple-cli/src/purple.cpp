@@ -5,7 +5,10 @@
 #include <nlohmann/json.hpp>
 
 //  CONSTRUCTORS
-Purple::Purple() {
+
+void    Purple::printHelp()
+{
+    std::cout << "Help ? No." << std::endl;
 }
 
 void    Purple::getWalletInformation(int id)
@@ -104,6 +107,13 @@ void    Purple::addPurchase(bool isDebt)
         network.putNewPurchase(wallet, sum, comment, debt_user);
 }
 
+void    Purple::setHostname(std::string hostname)
+{
+    this->config.setHostname(hostname);
+    std::cout << "Hostname set to " << hostname << std::endl;
+    this->config.save();
+}
+
 void    Purple::commandPicker(std::vector<std::string> args)
 {
     if(args[0] == "wallet")
@@ -120,16 +130,38 @@ void    Purple::commandPicker(std::vector<std::string> args)
         else
             std::cerr << "[Error] Please precise what do you want to add." << std::endl;
     }
+    else
+    {
+        this->printHelp();
+    }
+}
+
+bool    Purple::offlineCommands(std::vector<std::string> args)
+{
+    if (args.size() == 1 && args[0] == "logout")
+        this->logout();
+    else if (args[0] == "set")
+    {
+        if (args.size() == 3 && args[1] == "hostname")
+            this->setHostname(args[2]);
+        else
+        {
+            std::cerr << "Please precise what you want to set" << std::endl;
+        }
+    }
+    else
+        return true;
+    return false;
 }
 
 int Purple::run(std::vector<std::string> args)
 {
-    if (args.size() == 1 && args[0] == "logout")
-    {
-        this->logout();
-        return 0;
-    }
     this->config.loadConfiguration();
+    if (!this->offlineCommands(args))
+        return 0;
+    if (!this->config.checkConfiguration())
+        return 1;
+    this->network.setHostname(config.getHostname());
     if (!this->tryLogin())
     {
         std::cerr << "[Error] Couldn't log in." << std::endl;

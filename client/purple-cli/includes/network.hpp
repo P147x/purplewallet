@@ -12,6 +12,7 @@
 class Network {
 private:
     std::string _token;
+    std::string hostname;
 public:
     Network();
 
@@ -23,9 +24,9 @@ public:
 
     std::string getToken();
 
-    std::string putNewPurchase(unsigned int wID, float sum, std::string comment, bool isDebt);
-
     std::string putNewPurchase(unsigned int wID, float sum, std::string comment, unsigned int debt_user);
+
+    void setHostname(std::string);
 };
 
 #endif //NETWORK_HPP
