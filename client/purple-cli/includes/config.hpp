@@ -8,11 +8,13 @@ class Config {
         bool        checkConfigurationPath();
         void        createConfigurationFile();
         void        getConfiguration();
-        void        save();
-    public:
+
+public:
         void        loadConfiguration();
         std::string getToken();
         void        setToken(std::string);
 
         Config();
+
+    void        save();
 };

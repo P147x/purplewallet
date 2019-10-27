@@ -1,18 +1,6 @@
 #include "purple.hpp"
 #include "utils.h"
 
-std::string promptPassword() {
-    termios oldt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    termios newt = oldt;
-    newt.c_lflag &= ~ECHO;
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    std::string s;
-    std::cout << "Enter password:";
-    getline(std::cin, s);
-    return s;
-}
-
 //  CONSTRUCTORS
 Purple::Purple() {
 }
@@ -20,8 +8,12 @@ Purple::Purple() {
 int Purple::run()
 {
     this->config.loadConfiguration();
-    this->tryLogin();
-    //
+    if (!this->tryLogin())
+    {
+        std::cerr << "[Error] Couldn't log in." << std::endl;
+        return 1;
+    }
+    config.save();
     return 0;
 }
 
@@ -48,6 +40,6 @@ bool    Purple::tryLogin()
 {
     if (this->config.getToken().empty())
         this->login();
-    return false;
+    return true;
 }
 

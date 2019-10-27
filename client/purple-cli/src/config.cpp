@@ -62,19 +62,22 @@ bool    Config::checkConfigurationPath() {
 void Config::getConfiguration()
 {
     std::ifstream    file;
-    char            line[100];
-    file.open(_home);
+    //char            line[100];
+    std::string line;
+    file.open(_home + "/config");
     if (file.is_open())
     {
+        std::cout << "oui" << std::endl;
         file >> line;
         token = line;
+        std::cout << "oui" << line << std::endl;
     }
     file.close();
 }
 
 void Config::loadConfiguration() 
 {
-    if (this->checkConfigurationPath() == true)
+    if (this->checkConfigurationPath())
         getConfiguration();
     else
         this->createConfigurationFile();
