@@ -25,6 +25,8 @@ class Purple {
     void commandPicker(std::vector<std::string> args);
 
     void getWalletInformation(int id);
+
+    void logout();
 };
 
 #endif //PURPLE_HPP

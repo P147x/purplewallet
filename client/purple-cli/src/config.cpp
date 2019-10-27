@@ -39,6 +39,15 @@ void    Config::createConfigurationFile()
     outfile.close();
 }
 
+void    Config::removeConfiguration()
+{
+    std::ofstream file;
+
+    file.open(_home + "/config", std::ofstream::out | std::ofstream::trunc);
+    file << "";
+    file.close();
+}
+
 void    Config::save()
 {
     std::ofstream file;
@@ -67,10 +76,8 @@ void Config::getConfiguration()
     file.open(_home + "/config");
     if (file.is_open())
     {
-        std::cout << "oui" << std::endl;
         file >> line;
         token = line;
-        std::cout << "oui" << line << std::endl;
     }
     file.close();
 }

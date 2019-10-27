@@ -23,6 +23,11 @@ void    Purple::commandPicker(std::vector<std::string> args)
 
 int Purple::run(std::vector<std::string> args)
 {
+    if (args.size() == 1 && args[0] == "logout")
+    {
+        this->logout();
+        return 0;
+    }
     this->config.loadConfiguration();
     if (!this->tryLogin())
     {
@@ -51,6 +56,11 @@ bool    Purple::login()
             std::cout << "Error" << std::endl;
     } while (config.getToken() == "" && count++ < 3);
     return false;
+}
+
+void Purple::logout()
+{
+    this->config.removeConfiguration();
 }
 
 bool    Purple::tryLogin()

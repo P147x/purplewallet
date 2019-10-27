@@ -17,4 +17,6 @@ public:
         Config();
 
     void        save();
+
+    void removeConfiguration();
 };
