@@ -27,6 +27,10 @@ class Purple {
     void getWalletInformation(int id);
 
     void logout();
+
+    void addPurchase(bool isDebt);
+
+    float setSum();
 };
 
 #endif //PURPLE_HPP

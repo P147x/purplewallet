@@ -33,12 +33,55 @@ void    Purple::getWalletInformation(int id)
 
 }
 
+float   Purple::setSum()
+{
+    float           sum;
+
+    std::cout << "[0f-2000f]: ";
+    std::cin >> sum;
+    if (sum < 0)
+    {
+        std::cerr << "[Error] You must enter a positive value" << std::endl;
+        return 0;
+    }
+    return sum;
+}
+
+void    Purple::addPurchase(bool isDebt)
+{
+    unsigned int    wallet;
+    float           sum;
+    std::string     comment;
+
+    std::cout << "Enter your wallet ID" << std::endl;
+    std::cout << "[0-100]: ";
+    std::cin >> wallet;
+
+    std::cout << "Enter the sum of your invoice" << std::endl;
+    while ((sum = this->setSum()) == 0);
+
+    std::cout << "Reason of your buy ?" << std::endl;
+    std::cout << "[]: ";
+    std::cin >> comment;
+
+    network.putNewPurchase(wallet, sum, comment, isDebt);
+}
+
 void    Purple::commandPicker(std::vector<std::string> args)
 {
     if(args.size() == 2 && args[0] == "wallet" && std::stoi(args[1]))
     {
         std::cout << "Balance askeed" << std::endl;
         this->getWalletInformation(std::stoi(args[1]));
+    }
+    else if(args[0] == "add")
+    {
+        if (args.size() == 2 && args[1] == "purchase")
+            this->addPurchase(false);
+        else if (args.size() == 2 && args[1] == "debt")
+            this->addPurchase(true);
+        else
+            std::cerr << "[Error] Please precise what do you want to add." << std::endl;
     }
 }
 

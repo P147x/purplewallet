@@ -19,7 +19,34 @@ std::string Network::getToken()
     return this->_token;
 }
 
+std::string Network::putNewPurchase(unsigned int wID, float sum, std::string comment, bool isDebt)
+{
+    curlpp::Cleanup cleaner;
+    curlpp::Easy request;
+    std::ostringstream response;
+    std::string body;
 
+    body = "wallet=" + std::to_string(wID) + "&sum=" + std::to_string(sum) + "&reason=" + comment;
+    request.setOpt(new curlpp::options::Url("localhost:8080/api/v1/purchase"));
+    request.setOpt(new curlpp::options::Verbose(true));
+
+    std::list<std::string> header;
+    header.push_back("Content-Type: application/x-www-form-urlencoded");
+    header.push_back("Authorization: Bearer " + getToken());
+    //request.setOpt(new curlpp::options::Post);
+
+    request.setOpt(new curlpp::options::HttpHeader(header));
+    std::cout << std::to_string(wID) << std::endl;
+    std::cout << std::to_string(sum) << std::endl;
+    std::cout << comment << std::endl;
+    request.setOpt(new curlpp::options::PostFields(body));
+    request.setOpt(new curlpp::options::PostFieldSize(body.length()));
+
+    request.setOpt(new curlpp::options::WriteStream(&response));
+
+    request.perform();
+    return std::string(response.str());
+}
 
 std::string Network::getWallet(int id)
 {
@@ -40,8 +67,6 @@ std::string Network::getWallet(int id)
 
     request.perform();
     return std::string(response.str());
-
-
 }
 
 std::string Network::connexion(std::string user, std::string pass)
