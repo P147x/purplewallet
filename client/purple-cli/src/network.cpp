@@ -1,10 +1,46 @@
 #include <sstream>
 #include "network.hpp"
 #include <nlohmann/json.hpp>
+#include <bsm/audit.h>
 
 using json = nlohmann::json;
 
 Network::Network() {
+
+}
+
+void    Network::setToken(std::string token)
+{
+    this->_token = token;
+}
+
+std::string Network::getToken()
+{
+    return this->_token;
+}
+
+
+
+std::string Network::getWallet(int id)
+{
+    curlpp::Cleanup cleaner;
+    curlpp::Easy request;
+    std::ostringstream response;
+
+
+    request.setOpt(new curlpp::options::UserPwd("user:password"));
+    request.setOpt(new curlpp::options::Url("localhost:8080/api/v1/wallet/balance/" + std::to_string(id)));
+    request.setOpt(new curlpp::options::Verbose(true));
+
+    std::list<std::string> header;
+    header.push_back("Content-Type: application/octet-stream");
+    header.push_back("Authorization: Bearer " + getToken());
+    request.setOpt(new curlpp::options::HttpHeader(header));
+    request.setOpt(new curlpp::options::WriteStream(&response));
+
+    request.perform();
+    return std::string(response.str());
+
 
 }
 

@@ -17,6 +17,14 @@ class Purple {
         bool        tryLogin();
         int         run();
         Purple();
+
+    int run(std::vector<std::string> args);
+
+    void commandPicker(char **argv);
+
+    void commandPicker(std::vector<std::string> args);
+
+    void getWalletInformation(int id);
 };
 
 #endif //PURPLE_HPP
