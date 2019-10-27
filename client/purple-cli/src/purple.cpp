@@ -47,15 +47,51 @@ float   Purple::setSum()
     return sum;
 }
 
+bool    Purple::printInvoice(unsigned int wallet, float sum, std::string comment, unsigned int debt_user)
+{
+    std::string    response;
+
+    std::cout << "Please review your invoice importation before" << std::endl << std::endl;
+    std::cout << "----- ~ -----" << std::endl;
+    if (debt_user > 0)
+    {
+        std::cout << "- Type: DEBT" << std::endl;
+        std::cout << "- Debt owed by ID " + std::to_string(debt_user) << std::endl;
+    }
+    else
+        std::cout << "- Type: PURCHASE" << std::endl;
+    std::cout << "- Price: " + std::to_string(sum) << std::endl << std::endl;
+    while (true) {
+        std::cout << "Are you sure ?" << std::endl << "[y/N]: ";
+        std::cin.ignore();
+        std::getline(std::cin, response);
+        if (response.length() == 0 || tolower(response.c_str()[0]) == 'n')
+        {
+            std::cout << "Aborted" << std::endl;
+            return false;
+        }
+        else if (tolower(response.c_str()[0]) == 'y')
+            return true;
+    }
+}
+
 void    Purple::addPurchase(bool isDebt)
 {
     unsigned int    wallet;
+    unsigned int    debt_user = 0;
     float           sum;
     std::string     comment;
 
     std::cout << "Enter your wallet ID" << std::endl;
     std::cout << "[0-100]: ";
     std::cin >> wallet;
+
+    if (isDebt)
+    {
+        std::cout << "Who has to pay that ?" << std::endl;
+        std::cout << "[User ID]: ";
+        std::cin >> debt_user;
+    }
 
     std::cout << "Enter the sum of your invoice" << std::endl;
     while ((sum = this->setSum()) == 0);
@@ -64,14 +100,15 @@ void    Purple::addPurchase(bool isDebt)
     std::cout << "[]: ";
     std::cin >> comment;
 
-    network.putNewPurchase(wallet, sum, comment, isDebt);
+    if (this->printInvoice(wallet, sum, comment, debt_user))
+        network.putNewPurchase(wallet, sum, comment, debt_user);
 }
 
 void    Purple::commandPicker(std::vector<std::string> args)
 {
     if(args.size() == 2 && args[0] == "wallet" && std::stoi(args[1]))
     {
-        std::cout << "Balance askeed" << std::endl;
+        std::cout << "Balance asked" << std::endl;
         this->getWalletInformation(std::stoi(args[1]));
     }
     else if(args[0] == "add")

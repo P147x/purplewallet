@@ -24,6 +24,8 @@ public:
     std::string getToken();
 
     std::string putNewPurchase(unsigned int wID, float sum, std::string comment, bool isDebt);
+
+    std::string putNewPurchase(unsigned int wID, float sum, std::string comment, unsigned int debt_user);
 };
 
 #endif //NETWORK_HPP

@@ -31,6 +31,10 @@ class Purple {
     void addPurchase(bool isDebt);
 
     float setSum();
+
+    bool printInvoice(unsigned int wallet, float sum, std::string comment, bool isDebt);
+
+    bool printInvoice(unsigned int wallet, float sum, std::string comment, unsigned int debt_user);
 };
 
 #endif //PURPLE_HPP
