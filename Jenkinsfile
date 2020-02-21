@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
+		sh 'export GOCACHE = "/tmp/.cache"'
 		sh 'go mod download'
                 sh 'go build  ./cmd/purplewallet/*.go'
             }
