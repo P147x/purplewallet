@@ -7,7 +7,8 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'make build'
+		sh 'go mod download'
+                sh 'go build  ./cmd/purplewallet/*.go'
             }
         }
     }
