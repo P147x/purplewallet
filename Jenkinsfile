@@ -4,12 +4,12 @@ pipeline {
    	}
     agent { docker { image 'golang' } }
 	stages {
-		stage('Build' {
+		stage('Build') {
 			steps {
 				'make build'
 			}	
 		}
-		stage('Test' {
+		stage('Test') {
 			steps {
 				'make tests'
 			}	
