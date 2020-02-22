@@ -1,6 +1,9 @@
 pipeline {
-	agent { docker { image 'golang' } }
-	stages('Build' {
+    environment {
+       GOCACHE = "/tmp/.cache"
+   	}
+    agent { docker { image 'golang' } }
+    stages('Build' {
 		steps {
 			'make build'
 		}	
