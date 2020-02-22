@@ -4,6 +4,10 @@ pipeline {
 		steps {
 			'make build'
 		}	
-
+	}
+	stages('test' {
+		steps {
+			'make tests'
+		}	
 	}
 }
