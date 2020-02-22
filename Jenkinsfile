@@ -12,5 +12,3 @@ pipeline {
         }
     }
 }
-	       
-XDG_CACHE_HOME 
