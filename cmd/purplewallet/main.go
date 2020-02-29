@@ -2,6 +2,7 @@ package main
 
 import (
 	"purplewallet/internal/config"
+	"purplewallet/internal/database"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/configor"
@@ -18,5 +19,5 @@ func main() {
 
 	r = InitRouter(r)
 	r.Run(":" + strconv.Itoa(config.Config.Port))
-
+	database.CloseDatabase()
 }
