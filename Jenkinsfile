@@ -7,12 +7,12 @@ pipeline {
 		stage('Build') {
 			steps {
 				sh 'go mod download'
-                sh 'go build  ./cmd/purplewallet/*.go'
+                sh 'go build ./cmd/purplewallet/*.go'
 			}	
 		}
 		stage('Test') {
 			steps {
-				sh 'make tests'
+				sh 'go test ./cmd/purplewallet/*.go'
 			}	
 		}
 	}
