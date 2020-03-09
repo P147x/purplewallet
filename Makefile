@@ -3,6 +3,9 @@ PROJECTNAME=$(shell basename "$(PWD)")
 GOBASE=$(shell pwd)
 GOBIN=$(GOBASE)/bin
 
+tests:
+	go test test/*.go
+
 install:
 	go mod download
 
