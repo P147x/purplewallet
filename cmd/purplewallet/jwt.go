@@ -2,17 +2,17 @@ package main
 
 import (
 	"encoding/hex"
-	jwt "github.com/appleboy/gin-jwt/v2"
-	"github.com/gin-gonic/gin"
 	"purplewallet/internal/config"
 	"purplewallet/internal/database"
 	"purplewallet/internal/models"
 	"time"
 
+	jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/gin-gonic/gin"
+
 	"crypto/md5"
 	"fmt"
 )
-
 
 type login struct {
 	Username string `form:"username" json:"username" binding:"required"`
@@ -27,7 +27,7 @@ func MD5(text string) string {
 
 func GetUserFromDatabase(name string, password string) (models.Users, error) {
 	var user models.Users
-	if database.GetDatabase().Where("username = ? AND password = ?", name, MD5(password)).First(&user).RecordNotFound() {
+	if database.GetDatabase().Where("username = ? AND password = ?", name, password).First(&user).RecordNotFound() {
 		return user, fmt.Errorf("No user found in records")
 	}
 
@@ -85,9 +85,9 @@ func JWTMiddleware() *jwt.GinJWTMiddleware {
 				"message": message,
 			})
 		},
-		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
 		TokenHeadName: "Bearer",
-		TimeFunc: time.Now,
+		TimeFunc:      time.Now,
 	})
 	return authMiddleware
 }
