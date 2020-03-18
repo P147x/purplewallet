@@ -16,7 +16,6 @@ func Purchase(r *gin.RouterGroup) {
 	r.GET("/:username", getPurchaseByName)
 }
 
-
 func checkIfUserCanRegister(idUser int, idWallet int) bool {
 	var count int
 	database.GetDatabase().Table("users_wallets").Where("users_id = ? AND wallets_id = ?", idUser, idWallet).Count(&count)
@@ -46,9 +45,10 @@ func addNewPurchase(c *gin.Context) {
 		return
 	}
 
-	purchase := models.Purchase{Sum: sum, Reason: reason, Date: time.Now(), OwedBy: int(owedBy), CategoriesID: 0, UserID: int(user.ID), WalletID: int(wallet)}
+	purchase := models.Purchase{Sum: sum, Reason: reason, Date: time.Now(), OwedBy: uint(owedBy), CategoriesID: 0, UserID: uint(user.ID), WalletID: int(wallet)}
 	database.GetDatabase().Create(&purchase)
 	c.String(http.StatusAccepted, "Success")
+	database.Log(user.ID, "User "+string(user.ID)+" Created a new purchase on wallet "+string(wallet), 1)
 }
 
 // getPurchaseByName is used to return a list of purchases from an specific user

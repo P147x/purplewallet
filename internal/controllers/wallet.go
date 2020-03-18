@@ -13,7 +13,11 @@ import (
 
 func Wallet(r *gin.RouterGroup) {
 	r.GET("/balance/:wallet", getBalance)
-	//r.GET("/balance/:wallet/:user", getBalance)
+	//r.GET("/balance", getWallets)
+}
+
+func getUserWallets(c *gin.Context) {
+	//user, _ := c.Get("username")
 }
 
 func getBalance(c *gin.Context) {

@@ -7,10 +7,10 @@ type Purchase struct {
 	Sum          float64   `json:"sum"`
 	Date         time.Time `json:"date"`
 	Reason       string    `json:"reason"`
-	OwedBy       int       `json:"owed_by"`
+	OwedBy       uint      `json:"owed_by"`
 	WalletID     int       `json:"wallet_id"`
 	CategoriesID int       `gorm:"foreignkey:ID"`
-	UserID       int       `gorm:"foreignkey:ID"`
+	UserID       uint      `gorm:"foreignkey:ID"`
 	Categories   Categories
 	Users        Users
 }

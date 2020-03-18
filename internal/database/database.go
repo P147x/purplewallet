@@ -48,4 +48,13 @@ func createTables() {
 	db.AutoMigrate(&models.Users{})
 	db.AutoMigrate(&models.Wallets{})
 	db.AutoMigrate(&models.Purchase{})
+	db.AutoMigrate(&models.Logs{})
+}
+
+func Log(user uint, msg string, level uint) {
+	db.Create(&models.Logs{
+		Message: msg,
+		UserID:  user,
+		Level:   level,
+	})
 }
